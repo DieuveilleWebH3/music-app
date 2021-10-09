@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<!-- Loading Path to static files -->
+{% load staticfiles %}
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{% block title %}Login{% endblock %}</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" >
+    <link href="https://fonts.googleapis.com/css?family=Satisfy" rel="stylesheet" type="text/css" >
+    <link rel="stylesheet" type="text/css" href="{% static 'account/style.css' %}" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+    <script src="{% static 'account/js/main.js' %}"></script>
+
+</head>
+<body>
+
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+
+            <!-- Header -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#topNavBar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#"> </a>
+            </div>
+
+            <!-- Items -->
+            <div class="collapse navbar-collapse" id="topNavBar">
+            </div>
+
+        </div>
+    </nav>
+
+
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div>
+    {% block javascript %}{% endblock %}
+
+<!--Footer-->
+    <footer>
+        <div id="footer">
+            <center>
+                <small>
+                <br/> <br/>
+                By using this site you agree to and accept our user agreement. If you haven't read the user agreement please do so
+                    <a target="_blank" href="#" >here</a>
+                <br/> <br/>
+                2021 Copyright &copy; D. <br/>
+                All rights reserved <br/>
+                </small>
+                -
+                <a target="_blank" href="" title="Links to all the pages on this website">Sitemap</a>
+            </center>
+        </div>
+    </footer>
+
+</body>
+
+</html>
