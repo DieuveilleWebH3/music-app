@@ -1,7 +1,9 @@
 
 venv
+/venv
 
 .idea
+/.idea
 
 .env
 .env.backup
@@ -9,15 +11,12 @@ venv
 docker-compose.override.yml
 
 /.vscode
-
 .vscode
 
 secrets.dev.yaml
 values.dev.yaml
 
 my_log.txt
-
-p001/.env
 
 
 #cache
@@ -129,3 +128,5 @@ Thumbs.db
 
 ### Vagrant Patch ###
 *.box
+
+
