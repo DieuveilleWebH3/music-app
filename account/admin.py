@@ -8,7 +8,9 @@ from .models import *
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ['username', 'email', 'account_type']
+    list_display = ['id', 'username', 'email', 'account_type'] 
+    list_filter = ['account_type', ] 
+    search_fields = ['username', 'email', ]
     
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
