@@ -23,6 +23,11 @@ from .tokens import account_activation_token
 
 # Create your views here.
 
+def test(request):
+
+    return render(request, 'account/base.html')
+
+
 def user_login(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
@@ -70,7 +75,7 @@ def register(request):
                             # raise forms.ValidationError('Passwords don\'t match.')
                             # return cd['password2']
 
-                            messages.warning(request, "Unsuccesful registration. Please make sure your passwords match.")
+                            messages.warning(request, "Unsuccessful registration. Please make sure your passwords match.")
 
                             return redirect('register')
                         else:
@@ -83,7 +88,6 @@ def register(request):
 
                             # Save the User object
                             new_user.save()
-
 
                             current_site = get_current_site(request)
 
@@ -123,7 +127,7 @@ def register(request):
                         return redirect('register')
                 else:
                     user_form = UserRegistrationForm()
-                return render(request, 'account/register.html', {'user_form': user_form,})
+                return render(request, 'account/register.html', {'user_form': user_form})
             else:
                 return render(request, 'account/no_register.html')
 

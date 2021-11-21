@@ -18,4 +18,6 @@ def index(request):
         
         return render(request, 'music/index.html',)
     else:
+
         return render(request, 'music/index.html')
+

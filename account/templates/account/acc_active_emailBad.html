@@ -1,0 +1,91 @@
+<!doctype html>
+
+{% load static %}
+
+<html lang="en">
+    
+    <head>
+        
+        <meta charset="utf-8">
+        <title>Activate Account  |  D Zic Stream</title>
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+        <meta name="description" content="Music">
+        <meta name="keywords" content="Stream, Streaming, Music, Music Streaming, Music Stream, Stream Music, Streaming Music, Dieuveille, ELLENGA, BOUSSA, Dieuveille BOUSSA ELLENGA, Ell Bouss, ELL BOUSS, D-EllBouss, D. ELL BOUSS, free music, music website, free Stream, free music Stream, free music Streaming website,">
+        <meta name="author" content="Dieuveille BOUSSA ELLENGA">
+
+        <style>
+
+        </style>
+    </head>
+
+    <body class="authentication-bg">
+
+        <div class="home-btn d-none d-sm-block">
+            <a href="#" class="text-dark"><i class="mdi mdi-home-variant h2"></i></a>
+        </div>
+        <div class="account-pages my-5  pt-sm-5">
+            <div class="container">
+                <div class="row justify-content-center">
+
+                    <div class="col-md-8 col-lg-6 col-xl-12">
+                        <div>
+                            <div class="card">
+                               
+                                <div class="card-body p-4"> 
+
+                                    <div class="text-center">
+                                        <a href="#" class="mb-5 d-block auth-logo">
+                                            <img src="{% static 'images/logo.svg' %}" alt="Total logo" height="50" class="logo logo-dark">
+                                            <img src="{% static 'images/logo.svg' %}" alt="Total logo" height="50" class="logo logo-light">
+                                        </a>
+                                    </div>
+    
+                                    <div class="text-center mt-2">
+                                        <h4 style="color: #164194;">Activate Account.</h4>
+                                    </div>
+
+                                    {% if messages %}
+                                        {% for message in messages %}
+                                        <div style="text-align: center;" {% if message.tags == 'warning' %} class="alert alert-danger alert-dismissible fade show" {% else %} class="alert alert-{{ message.tags }} alert-dismissible fade show" {% endif %} role="alert">
+                                            {{ message|safe }}
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        {% endfor %}
+                                    {% endif %}
+
+                                    <div class="p-1 mt-4">
+                                        <div class="alert alert-success text-center mb-4" role="alert">
+                                            <br/>
+                                            Hi {{ user.username }},
+                                            <br/>
+                                            <br/>
+                                            Please click  <a href="{{ protocol }}://{{ domain }}{% url 'activate' uidb64=uid token=token %}">here</a>  or on the link bellow to confirm your registration, by activating your account
+                                            <br/>
+                                            <br/>
+                                            {{ protocol }}://{{ domain }}{% url 'activate' uidb64=uid token=token %}
+                                            <br/>
+                                            <br/>
+                                            <br/>
+                                        </div>
+
+                                    </div>
+                
+                                </div>
+                            </div>
+
+                            <div class="mt-5 text-center">
+                                <p>©   2021    Incident Analytics. </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end row -->
+            </div>
+            <!-- end container -->
+        </div>
+
+    </body>
+
+</html>

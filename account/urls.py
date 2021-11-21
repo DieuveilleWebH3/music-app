@@ -6,6 +6,9 @@ from . import views
 
 urlpatterns = [
 
+    # test view
+    path('test/', views.test, name='test'),
+
     # register view
     path('register/', views.register, name='register'),
 
