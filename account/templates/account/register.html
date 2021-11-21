@@ -1,7 +1,6 @@
 {% extends "account/base.html" %}
 
 {% load static %}
-
 <!-- Loading Path to static files -->
 {% load staticfiles %}
 
@@ -18,6 +17,19 @@
         <div class="centered-modal" role="dialog">
             <div class="register_dialog">
 
+
+                {% if messages %}
+                    {% for message in messages %}
+                    <div style="text-align: center;" {% if message.tags == 'warning' %} class="alert alert-danger alert-dismissible fade show" {% else %} class="alert alert-{{ message.tags }} alert-dismissible fade show" {% endif %} role="alert">
+                        {{ message|safe }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+
+
                 <!-- Modal content-->
                 <div class="modal-content">
 
@@ -29,34 +41,76 @@
                             <div class="ms_register_img">
                                 <img src="{% static 'images/register_img.png' %}" alt="" class="img-fluid" />
                             </div>
+
                             <div class="ms_register_form">
                                 <h2>Register / Sign Up</h2>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Enter Firstname" required>
+                                            <div class="invalid-feedback">
+                                                This field is required.
+                                            </div>
+
+                                            <span class="form_icon">
+                                                <i class="fa_icon form-user" aria-hidden="true"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Enter Lastname" required>
+                                            <div class="invalid-feedback">
+                                                This field is required.
+                                            </div>
+
+                                            <span class="form_icon">
+                                                <i class="fa_icon form-user" aria-hidden="true"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <br>
+
                                 <div class="form-group">
-                                    <input type="text" placeholder="Enter Your Name" class="form-control">
+                                    <input type="text" id="username" name="username" placeholder="Enter Username" class="form-control" required>
                                     <span class="form_icon">
-                                <i class="fa_icon form-user" aria-hidden="true"></i>
-                                </span>
+                                        <i class="fa_icon form-user" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+
+                                <div class="form-group">
+                                    <input type="email" id="email" name="email" placeholder="Enter Email" class="form-control" required>
+                                    <span class="form_icon">
+                                        <i class="fa_icon form-envelope" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+
+                                <div class="form-group">
+                                    <input type="password" id="password" name="password" placeholder="Enter Password" class="form-control" required>
+                                    <span class="form_icon">
+                                        <i class="fa_icon form-lock" aria-hidden="true"></i>
+                                    </span>
                                 </div>
                                 <div class="form-group">
-                                    <input type="text" placeholder="Enter Your Email" class="form-control">
+                                    <input type="password" id="password_confirm" name="password_confirm" placeholder="Confirm Password" class="form-control" required>
                                     <span class="form_icon">
-                                <i class="fa_icon form-envelope" aria-hidden="true"></i>
-                            </span>
+                                        <i class=" fa_icon form-lock" aria-hidden="true"></i>
+                                    </span>
                                 </div>
-                                <div class="form-group">
-                                    <input type="password" placeholder="Enter Password" class="form-control">
-                                    <span class="form_icon">
-                            <i class="fa_icon form-lock" aria-hidden="true"></i>
-                            </span>
+
+
+                                <div class="remember_checkbox">
+                                    <label>I am an Artist
+                                        <input type="checkbox" id="artist" name="artist" value="yes_artist">
+                                        <span class="checkmark"></span>
+                                    </label>
                                 </div>
-                                <div class="form-group">
-                                    <input type="password" placeholder="Confirm Password" class="form-control">
-                                    <span class="form_icon">
-                            <i class=" fa_icon form-lock" aria-hidden="true"></i>
-                            </span>
-                                </div>
+
                                 <a href="#" class="ms_btn">register now</a>
-                                <p>Already Have An Account? <a href="#myModal1" data-toggle="modal" class="ms_modal hideCurrentModel">login here</a></p>
+                                <p>Already Have An Account? <a href="{% url 'login' %}" class="ms_modal hideCurrentModel">login here</a></p>
                             </div>
                         </div>
 
