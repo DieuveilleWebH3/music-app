@@ -112,7 +112,7 @@ def register(request):
                                 'domain': current_site.domain,
                                 'uid': urlsafe_base64_encode(force_bytes(new_user.pk)),
                                 # 'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
-                                'token':account_activation_token.make_token(new_user),
+                                'token': account_activation_token.make_token(new_user),
                             })
                             plain_message = strip_tags(html_message)
                             from_email = settings.EMAIL_HOST_USER
@@ -123,7 +123,7 @@ def register(request):
                             return render(request, 'account/register_done.html', {'new_user': new_user})
 
                     else:
-                        messages.warning(request, "Ooops. Email and password do not match... Try again. ")
+                        messages.warning(request, "Ooops. Something went wrong ... Try again. ")
                         return redirect('register')
                 else:
                     user_form = UserRegistrationForm()
@@ -148,8 +148,8 @@ def activate(request, uidb64, token, backend='django.contrib.auth.backends.Model
         user.save()
         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
         
-        messages.success(request, "Your Acount has been successfuly activated ! ")
-        return redirect('dashboard')
+        messages.success(request, "Your Account has been successfully activated ! ")
+        return redirect('index')
     else:
         return HttpResponse('Activation link is invalid! Contact your Admin.')
 
@@ -161,6 +161,7 @@ def profile(request):
     user_form = UserEditForm(instance=request.user)
     pform = PasswordChangeForm(request.user)
     context = {'user_form': user_form, 'pform': pform}
+
     return render(request, template_name, context)
 
 
@@ -214,7 +215,6 @@ def change_password(request):
 
     # on change l'URL, de settings vers profile
     return redirect(reverse('profile') + '#navtabs-profile')
-
 
 
 @login_required 
