@@ -44,8 +44,6 @@ urlpatterns = [
     # alternative way to include authentication views
     path('', include('django.contrib.auth.urls')),
 
-    # 
-    path('edit/', views.edit, name='edit'),
 
     # 
     path('change_status_registration/', views.change_status_registration, name='change_status_registration'),
