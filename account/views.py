@@ -29,28 +29,37 @@ def test(request):
 
 
 def user_login(request):
-    if request.method == 'POST':
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            cd = form.cleaned_data
 
-            user = authenticate(request,
-                                username=cd['username'],
-                                password=cd['password'])
-            if user is not None:
-                if user.is_active:
-                    login(request, user)
+    # we request the user
+    a_user = request.user
 
-                    return redirect('index')
-                else:
-                    return HttpResponse('Disabled account')
-            else:
-                messages.warning(request, "Please enter a correct username and password. Note that both fields may be case-sensitive.")
-                
-                return redirect('login')
+    if a_user.is_authenticated:
+        message = "Login"
+
+        return render(request, 'account/login_already.html', {'user': a_user, 'message': message})
     else:
-        form = LoginForm()
-    return render(request, 'account/login.html', {'form': form})
+        if request.method == 'POST':
+            form = LoginForm(request.POST)
+            if form.is_valid():
+                cd = form.cleaned_data
+                user = authenticate(request,
+                                    username=cd['username'],
+                                    password=cd['password'])
+                if user is not None:
+                    if user.is_active:
+                        login(request, user)
+                        return redirect('index')
+                    else:
+                        messages.warning(request, "Account not active !!")
+
+                        return redirect('login')
+                else:
+                    messages.warning(request, "Please enter a correct username and password. Note that both fields may be case-sensitive.")
+                    return redirect('login')
+                    # return HttpResponse('Invalid login')
+        else:
+            form = LoginForm()
+            return render(request, 'account/login.html', {'form': form})
 
 
 def register(request):
@@ -63,71 +72,80 @@ def register(request):
 
             if allow_register:
 
-                if request.method == 'POST':
-                    user_form = UserRegistrationForm(request.POST)
-                    if user_form.is_valid():
-                        # Create a new user object but avoid saving it yet
-                        new_user = user_form.save(commit=False)
+                # we request the user
+                a_user = request.user
 
-                        cd = user_form.cleaned_data
+                if a_user.is_authenticated:
+                    message = "Register"
 
-                        if cd['password'] != cd['password2']:
-                            # raise forms.ValidationError('Passwords don\'t match.')
-                            # return cd['password2']
-
-                            messages.warning(request, "Unsuccessful registration. Please make sure your passwords match.")
-
-                            return redirect('register')
-                        else:
-                            # Set the chosen password
-                            new_user.set_password(
-                                user_form.cleaned_data['password'])
-
-                            # we deactivate the account until email confirmation
-                            new_user.is_active = False
-
-                            # Save the User object
-                            new_user.save()
-
-                            current_site = get_current_site(request)
-
-                            """ 
-                            mail_subject = 'Activate Your Account.' 
-                            message = render_to_string('account/acc_active_emailBad.html', {
-                                'user': new_user,
-                                'domain': current_site.domain,
-                                'uid': urlsafe_base64_encode(force_bytes(new_user.pk)),
-                                # 'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
-                                'token':account_activation_token.make_token(new_user),
-                            })
-                            to_email = cd['email']
-                            email = EmailMessage(mail_subject, message, to=[to_email])
-                            email.send()
-                            """
-
-                            subject = 'Activate Your Account.'
-                            html_message = render_to_string('account/acc_active_emailBad.html',
-                            {
-                                'user': new_user,
-                                'domain': current_site.domain,
-                                'uid': urlsafe_base64_encode(force_bytes(new_user.pk)),
-                                # 'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
-                                'token': account_activation_token.make_token(new_user),
-                            })
-                            plain_message = strip_tags(html_message)
-                            from_email = settings.EMAIL_HOST_USER
-                            to = cd['email']
-
-                            mail.send_mail(subject, plain_message, from_email, [to], html_message=html_message)
-
-                            return render(request, 'account/register_done.html', {'new_user': new_user})
-
-                    else:
-                        messages.warning(request, "Ooops. Something went wrong ... Try again. ")
-                        return redirect('register')
+                    return render(request, 'account/login_already.html', {'user': a_user, 'message': message})
                 else:
-                    user_form = UserRegistrationForm()
-                return render(request, 'account/register.html', {'user_form': user_form})
+
+                    if request.method == 'POST':
+                        user_form = UserRegistrationForm(request.POST)
+                        if user_form.is_valid():
+                            # Create a new user object but avoid saving it yet
+                            new_user = user_form.save(commit=False)
+
+                            cd = user_form.cleaned_data
+
+                            if cd['password'] != cd['password2']:
+                                # raise forms.ValidationError('Passwords don\'t match.')
+                                # return cd['password2']
+
+                                messages.warning(request, "Unsuccessful registration. Please make sure your passwords match.")
+
+                                return redirect('register')
+                            else:
+                                # Set the chosen password
+                                new_user.set_password(
+                                    user_form.cleaned_data['password'])
+
+                                # we deactivate the account until email confirmation
+                                new_user.is_active = False
+
+                                # Save the User object
+                                new_user.save()
+
+                                current_site = get_current_site(request)
+
+                                """ 
+                                mail_subject = 'Activate Your Account.' 
+                                message = render_to_string('account/acc_active_emailBad.html', {
+                                    'user': new_user,
+                                    'domain': current_site.domain,
+                                    'uid': urlsafe_base64_encode(force_bytes(new_user.pk)),
+                                    # 'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                                    'token':account_activation_token.make_token(new_user),
+                                })
+                                to_email = cd['email']
+                                email = EmailMessage(mail_subject, message, to=[to_email])
+                                email.send()
+                                """
+
+                                subject = 'Activate Your Account.'
+                                html_message = render_to_string('account/acc_active_emailBad.html',
+                                {
+                                    'user': new_user,
+                                    'domain': current_site.domain,
+                                    'uid': urlsafe_base64_encode(force_bytes(new_user.pk)),
+                                    # 'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                                    'token': account_activation_token.make_token(new_user),
+                                })
+                                plain_message = strip_tags(html_message)
+                                from_email = settings.EMAIL_HOST_USER
+                                to = cd['email']
+
+                                mail.send_mail(subject, plain_message, from_email, [to], html_message=html_message)
+
+                                return render(request, 'account/register_done.html', {'new_user': new_user})
+
+                        else:
+                            messages.warning(request, "Ooops. Something went wrong ... Try again. ")
+                            return redirect('register')
+                    else:
+                        user_form = UserRegistrationForm()
+                    return render(request, 'account/register.html', {'user_form': user_form})
             else:
                 return render(request, 'account/no_register.html')
 

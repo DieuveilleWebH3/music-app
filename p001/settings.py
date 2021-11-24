@@ -156,7 +156,7 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 LOGIN_REDIRECT_URL = 'index'
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
-# LOGOUT_REDIRECT_URL = 'login'
+LOGOUT_REDIRECT_URL = 'index'
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
