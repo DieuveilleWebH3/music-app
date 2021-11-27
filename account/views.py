@@ -143,6 +143,20 @@ def register(request):
                         else:
                             user_form = request.POST
 
+                            # Check to see if any users already exist with this email as a username.
+                            try:
+                                match = User.objects.get(email=user_form.get('email'))
+                                if match:
+                                    # A user was found with this as a username, raise an error.
+                                    # raise forms.ValidationError('This email address is already used.')
+
+                                    messages.warning(request, "This email address is already used.")
+
+                                    return redirect('register')
+                            except User.DoesNotExist:
+                                # Unable to find a user
+                                pass
+
                             if user_form.get('password') != user_form.get('password2'):
 
                                 messages.warning(request, "Unsuccessful registration. Please make sure your passwords match.")
@@ -159,6 +173,13 @@ def register(request):
 
     except AllowRegistration.DoesNotExist:
         pass
+        """ 
+        allow_first = AllowRegistration
+        allow_first.save()
+        # 
+        user_form = UserRegistrationForm()
+        return render(request, 'account/register.html', {'user_form': user_form})
+        """
 
 
 def activate(request, uidb64, token, backend='django.contrib.auth.backends.ModelBackend'):
