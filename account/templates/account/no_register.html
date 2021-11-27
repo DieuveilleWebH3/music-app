@@ -189,31 +189,13 @@
                     <div class="ms_top_right">
 
                         <div class="ms_top_lang">
-                            <span data-toggle="modal" data-target="#lang_modal">languages <img src="images/svg/lang.svg" alt=""></span>
                         </div>
 
                         <div class="ms_top_btn">
-
-                            <a href="javascript:;" class="ms_admin_name"> {{ user.username }}
-
-                            {% if user.photo %}
-                                <img class="rounded-circle header-profile-user" src="{{user.photo.url}}"
-                                        alt="{{user.username}} Avatar">
-                            {% else %}
-                                <span class="ms_pro_name">
-                                    ns
-                                </span>
-                            {% endif %}
-                            </a>
-
-                            <ul class="pro_dropdown_menu" style="margin-right: 50px; padding-right: 50px">
-                                <li><a href="{% url 'profile' %}">Profile</a></li>
-                                <li><a href="#" target="_blank">Pricing Plan</a></li>
-                                <li><a href="#" target="_blank">Blog</a></li>
-                                <li><a href="#">Setting</a></li>
-                                <li><a href="{% url 'logout' %}">Logout</a></li>
-                            </ul>
+                            <a href="{% url 'register' %}" class="ms_btn reg_btn"><span>register</span></a>
+                            <a href="{% url 'login' %}" class="ms_btn login_btn"><span>login</span></a>
                         </div>
+
                     </div>
                 </div>
                 <!----Upload and Share Wrapper Start---->

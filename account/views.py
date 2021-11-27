@@ -70,19 +70,20 @@ def register(request):
 
             allow_register = AllowRegistration.objects.get(id=1).status
 
-            if allow_register:
+            # we request the user
+            a_user = request.user
 
-                # we request the user
-                a_user = request.user
+            if a_user.is_authenticated:
+                message = "Register"
 
-                if a_user.is_authenticated:
-                    message = "Register"
+                return render(request, 'account/login_already.html', {'user': a_user, 'message': message})
 
-                    return render(request, 'account/login_already.html', {'user': a_user, 'message': message})
-                else:
+            else:
+                if allow_register:
 
                     if request.method == 'POST':
                         user_form = UserRegistrationForm(request.POST)
+
                         if user_form.is_valid():
                             # Create a new user object but avoid saving it yet
                             new_user = user_form.save(commit=False)
@@ -139,15 +140,22 @@ def register(request):
                                 mail.send_mail(subject, plain_message, from_email, [to], html_message=html_message)
 
                                 return render(request, 'account/register_done.html', {'new_user': new_user})
-
                         else:
+                            user_form = request.POST
+
+                            if user_form.get('password') != user_form.get('password2'):
+
+                                messages.warning(request, "Unsuccessful registration. Please make sure your passwords match.")
+
+                                return redirect('register')
+
                             messages.warning(request, "Ooops. Something went wrong ... Try again. ")
                             return redirect('register')
                     else:
                         user_form = UserRegistrationForm()
-                    return render(request, 'account/register.html', {'user_form': user_form})
-            else:
-                return render(request, 'account/no_register.html')
+                        return render(request, 'account/register.html', {'user_form': user_form})
+                else:
+                    return render(request, 'account/no_register.html')
 
     except AllowRegistration.DoesNotExist:
         pass
