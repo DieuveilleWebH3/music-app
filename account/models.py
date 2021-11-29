@@ -30,7 +30,6 @@ class User(AbstractUser):
         return self.username
 
 
-
 class AllowRegistration(models.Model):
 
     name = models.CharField(max_length=120, db_index=True, unique=True, default='user_registration') 

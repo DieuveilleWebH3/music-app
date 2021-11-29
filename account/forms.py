@@ -14,7 +14,7 @@ class UserRegistrationForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email')
+        fields = ('first_name', 'last_name', 'username', 'email')
 
     def clean_password2(self):
         cd = self.cleaned_data
@@ -23,10 +23,17 @@ class UserRegistrationForm(forms.ModelForm):
         return cd['password2']
 
 
-
 class UserEditForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email') 
+        fields = ('first_name', 'last_name', 'username', 'email')
         # fields = ('username', 'first_name', 'last_name', 'email', 'date_of_birth', 'photo')
+
+    """ 
+    date_of_birth = forms.DateField(
+        widget=forms.DateInput(format='%m/%d/%Y'),
+        input_formats=('%m/%d/%Y', )
+        )
+    """
+
 
