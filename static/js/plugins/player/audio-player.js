@@ -7,7 +7,7 @@ $(function() {
             jPlayer: "#jquery_jplayer_1",
             cssSelectorAncestor: "#jp_container_1"
         }, [{
-			image : 'static/images/weekly/song1.jpg',	
+			image : "static/images/weekly/song1.jpg",
             title: "Cro Magnon Man",
             artist: "Mushroom Records",
             mp3: "http://www.jplayer.org/audio/mp3/TSP-01-Cro_magnon_man.mp3",
