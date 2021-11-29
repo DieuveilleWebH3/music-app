@@ -42,8 +42,16 @@ def user_login(request):
 
     if a_user.is_authenticated:
         message = "Login"
+        initial = str(a_user.username[0])
+        if a_user.first_name and a_user.last_name:
+            initial = str(a_user.first_name[0]) + str(a_user.last_name[0])
 
-        return render(request, 'account/login_already.html', {'user': a_user, 'message': message})
+        return render(request, 'account/login_already.html',
+                      {
+                          'user': a_user,
+                          'message': message,
+                          'initial': initial,
+                      })
     else:
         if request.method == 'POST':
             form = LoginForm(request.POST)
@@ -83,8 +91,16 @@ def register(request):
             if a_user.is_authenticated:
                 message = "Register"
 
-                return render(request, 'account/login_already.html', {'user': a_user, 'message': message})
+                initial = str(a_user.username[0])
+                if a_user.first_name and a_user.last_name:
+                    initial = str(a_user.first_name[0]) + str(a_user.last_name[0])
 
+                return render(request, 'account/login_already.html',
+                              {
+                                  'user': a_user,
+                                  'message': message,
+                                  'initial': initial
+                              })
             else:
                 if allow_register:
 
@@ -264,10 +280,22 @@ def activate(request, uidb64, token, backend='django.contrib.auth.backends.Model
 @login_required(redirect_field_name='login')
 @require_GET
 def profile(request):
+    # we request the user
+    a_user = request.user
+
     template_name = 'account/profile.html'
     user_form = UserEditForm(instance=request.user)
     pform = PasswordChangeForm(request.user)
-    context = {'user_form': user_form, 'pform': pform}
+
+    initial = str(a_user.username[0])
+    if a_user.first_name and a_user.last_name:
+        initial = str(a_user.first_name[0]) + str(a_user.last_name[0])
+
+    context = {
+        'user_form': user_form,
+        'pform': pform,
+        'initial': initial
+    }
 
     return render(request, template_name, context)
 
@@ -320,7 +348,6 @@ def change_password(request):
         else:
             messages.warning(request, 'Please correct the error below.')
 
-    # on change l'URL, de settings vers profile
     return redirect(reverse('profile') + '#navtabs-profile')
 
 

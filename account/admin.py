@@ -8,9 +8,9 @@ from .models import *
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ['id', 'username', 'email', 'account_type'] 
+    list_display = ['id', 'first_name', 'last_name', 'username', 'email', 'account_type']
     list_filter = ['account_type', ] 
-    search_fields = ['username', 'email', ]
+    search_fields = ['username',  'first_name', 'last_name', 'email', ]
     
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
@@ -32,8 +32,9 @@ class UserAdmin(admin.ModelAdmin):
 
 @admin.register(AllowRegistration)
 class AllowRegistrationAdmin(admin.ModelAdmin):
-	list_display = ('name', 'status', )
-	list_filter = ['name', 'status', ]
-	search_fields = ['name', 'status', ]
+    list_display = ('name', 'status', )
+    list_filter = ['name', 'status', ]
+    search_fields = ['name', 'status', ]
+
 
 

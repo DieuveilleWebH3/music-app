@@ -20,13 +20,13 @@ urlpatterns = [
     # path('login/', auth_views.LoginView.as_view(), name='login'),
 
     # we add the URL for the profile view, to allow users to see their personal info.
-    path('profile', views.profile, name="profile"),
+    path('profile/', views.profile, name="profile"),
 
     # we add the URL for the edit view, to allow a user to edit / update their personal info.
     path('edit/', views.edit, name='edit'),
 
     # we add the URL for the change_password view, to allow a user to change their password.
-    path('change_password', views.change_password, name="change_password"),
+    path('change_password/', views.change_password, name="change_password"),
 
     # 
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
