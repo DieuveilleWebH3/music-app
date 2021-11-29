@@ -12,13 +12,20 @@ from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.core.files.storage import FileSystemStorage
 import datetime
 from django.core import mail
-from django.core.mail import EmailMessage
+
+from django.core.mail import send_mail, EmailMessage
+from django.conf import settings
+from django.urls import reverse
+import requests
+
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.html import strip_tags
 from django.template.loader import render_to_string
 from .tokens import account_activation_token
+
+from django.db.models import Q
 
 
 # Create your views here.
@@ -130,6 +137,14 @@ def register(request):
                                 # Save the User object
                                 new_user.save()
 
+                                # we change the account type if they checked artist checkbox
+                                if 'artist' in request.POST:
+                                    if int(request.POST.get('artist')) == 1:
+                                        new_user.account_type = '1'
+
+                                # Save the User object
+                                new_user.save()
+
                                 current_site = get_current_site(request)
 
                                 """ 
@@ -148,13 +163,13 @@ def register(request):
 
                                 subject = 'Activate Your Account.'
                                 html_message = render_to_string('account/acc_active_emailBad.html',
-                                {
-                                    'user': new_user,
-                                    'domain': current_site.domain,
-                                    'uid': urlsafe_base64_encode(force_bytes(new_user.pk)),
-                                    # 'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
-                                    'token': account_activation_token.make_token(new_user),
-                                })
+                                                                {
+                                                                    'user': new_user,
+                                                                    'domain': current_site.domain,
+                                                                    'uid': urlsafe_base64_encode(force_bytes(new_user.pk)),
+                                                                    # 'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                                                                    'token': account_activation_token.make_token(new_user),
+                                                                })
                                 plain_message = strip_tags(html_message)
                                 from_email = settings.EMAIL_HOST_USER
                                 to = cd['email']
@@ -217,8 +232,30 @@ def activate(request, uidb64, token, backend='django.contrib.auth.backends.Model
         user.is_active = True
         user.save()
         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+
+        subject = 'New User Activation'
+        message = f'Hello Administrator, ' \
+                  f'\n' \
+                  f'A new User has just activated their account ' \
+                  f'\n' \
+                  f' ' \
+                  f'\n' \
+                  f'Email {user.email}' \
+                  f'\n' \
+                  f'\n' \
+                  f' Name: {user.first_name}  {user.last_name}' \
+                  f'\n' \
+                  f'\n' \
+                  f' Type: {user.account_type} ' \
+                  f'\n' \
+                  f'\n' \
+                  f'\"'
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = [settings.DEFAULT_TO_EMAIL, ]
+        send_mail(subject, message, email_from, recipient_list, fail_silently=False)
         
         messages.success(request, "Your Account has been successfully activated ! ")
+
         return redirect('index')
     else:
         return HttpResponse('Activation link is invalid! Contact your Admin.')
