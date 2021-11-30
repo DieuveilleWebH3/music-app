@@ -346,9 +346,9 @@ def change_password(request):
             messages.success(request, 'Your password was successfully updated!')
             return redirect('change_password')
         else:
-            messages.warning(request, 'Please correct the error below.')
+            messages.warning(request, 'An error has occurred ! Please input the right information.')
 
-    return redirect(reverse('profile') + '#navtabs-profile')
+    return redirect('profile')
 
 
 @login_required 
