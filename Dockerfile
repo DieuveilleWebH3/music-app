@@ -13,7 +13,8 @@ ENV PYTHONUNBUFFERED=1
 
 # Install pip requirements
 COPY requirements.txt .
-RUN python -m pip install -r requirements.txt
+# RUN python -m pip install -r requirements.txt
+# RUN pip install --use-deprecated=legacy-resolver -r /root/requirements.txt
 RUN pip install -r requirements.txt
 
 WORKDIR /app
@@ -26,3 +27,6 @@ USER appuser
 
 # During debugging, this entry point will be overridden. For more information, please refer to https://aka.ms/vscode-docker-python-debug
 CMD ["gunicorn", "--bind", "0.0.0.0:1202", "p001.wsgi"]
+# CMD ["python", "/app/manage.py", "runserver" , "0.0.0.0:8000"]
+# CMD ["python", "/app/manage.py", "runserver" , "0.0.0.0:1202"]
+
