@@ -9,6 +9,7 @@ from django.urls import reverse
 class Genre(models.Model):
     title = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(unique=True)
+    logo = models.ImageField(blank=True)
 
     def __str__(self):
         return self.title

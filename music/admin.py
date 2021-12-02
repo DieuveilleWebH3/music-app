@@ -5,7 +5,7 @@ from .models import *
 # Register your models here.
 
 class GenreAdmin(admin.ModelAdmin):
-    list_display = ("title",)
+    list_display = ("title", "logo")
     list_filter = ("title", )
     search_fields = ("title",)
 
@@ -13,7 +13,7 @@ class GenreAdmin(admin.ModelAdmin):
 
 
 class AlbumAdmin(admin.ModelAdmin):
-    list_display = ("title", "slug", "artist", "genres", "is_favorites", "user")
+    list_display = ("title", "slug", "artist", "genres", "is_favorites", "user", "album_logo")
     list_filter = ("genre", "artist")
     search_fields = ("title", "artist", "genre")
 
