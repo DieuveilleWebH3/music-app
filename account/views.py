@@ -107,33 +107,12 @@ def register(request):
                     if request.method == 'POST':
                         user_form = UserRegistrationForm(request.POST)
 
-                        print()
-                        print("\n")
-                        if 'artist' in request.POST:
-                            print("*************************** user form artist or not ***************************")
-                            print(request.POST.get('artist'))
-
                         if user_form.is_valid():
-
-                            print()
-                            print("\n")
-                            if 'artist' in request.POST:
-                                print("*************************** user form artist or not ***************************")
-                                print(request.POST.get('artist'))
 
                             # Create a new user object but avoid saving it yet
                             new_user = user_form.save(commit=False)
 
                             cd = user_form.cleaned_data
-
-                            print()
-                            print("\n")
-                            print("*************************** register data cleaned ****************************")
-                            # print(new_user)
-                            print()
-                            print("\n")
-                            print()
-                            print(cd)
 
                             if cd['password'] != cd['password2']:
                                 # raise forms.ValidationError('Passwords don\'t match.')
