@@ -251,7 +251,7 @@ def activate(request, uidb64, token, backend='django.contrib.auth.backends.Model
         
         messages.success(request, "Your Account has been successfully activated ! ")
 
-        return redirect('index')
+        return redirect('profile')
     else:
         return HttpResponse('Activation link is invalid! Contact your Admin.')
 
