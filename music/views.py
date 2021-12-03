@@ -57,36 +57,44 @@ def create_album(request):
         album.album_logo = request.FILES['album_logo']
         file_type = album.album_logo.url.split('.')[-1]
         file_type = file_type.lower()
+
         if file_type not in IMAGE_FILE_TYPES:
             context = {
                 'album': album,
                 'form': form,
                 'error_message': 'Image file must be PNG, JPG, or JPEG',
             }
+
             return render(request, 'music/album_form.html', context)
+
         album.save()
+
         return render(request, 'music/detail.html', {'album': album})
+
     context = {
         "form": form,
     }
+
     return render(request, 'music/album_form.html', context)
 
 
 class AlbumUpdate(UpdateView):
     model = Album
-    fields = ['artist', 'album_title', 'genre', 'album_logo']
+    fields = ['artist', 'title', 'genre', 'album_logo']
 
 
-def delete_album(request, album_id):
-    album = Album.objects.get(pk=album_id)
+def delete_album(request, album_slug):
+    album = Album.objects.get(slug=album_slug)
     album.delete()
-    albums = Album.objects.filter(user=request.user)
+    albums = Album.objects.all()
+
     return render(request, 'music/index.html', {'albums': albums})
 
 
 def create_song(request, album_slug):
     form = SongForm(request.POST or None, request.FILES or None)
     album = get_object_or_404(Album, slug=album_slug)
+
     if form.is_valid():
         albums_songs = album.song_set.all()
         for s in albums_songs:
@@ -96,26 +104,32 @@ def create_song(request, album_slug):
                     'form': form,
                     'error_message': 'You already added that song',
                 }
+
                 return render(request, 'music/create_song.html', context)
+
         song = form.save(commit=False)
         song.album = album
         song.audio_file = request.FILES['audio_file']
         file_type = song.audio_file.url.split('.')[-1]
         file_type = file_type.lower()
+
         if file_type not in AUDIO_FILE_TYPES:
             context = {
                 'album': album,
                 'form': form,
                 'error_message': 'Audio file must be WAV, MP3, or OGG',
             }
+
             return render(request, 'music/create_song.html', context)
 
         song.save()
         return render(request, 'music/detail.html', {'album': album})
+
     context = {
         'album': album,
         'form': form,
     }
+
     return render(request, 'music/create_song.html', context)
 
 
@@ -166,10 +180,12 @@ def songs(request, filter_by):
             users_songs = users_songs.filter(is_favorite=True)
     except Album.DoesNotExist:
         users_songs = []
-    return render(request, 'music/songs.html', {
-        'song_list': users_songs,
-        'filter_by': filter_by,
-    })
+
+    return render(request, 'music/songs.html',
+                  {
+                      'song_list': users_songs,
+                      'filter_by': filter_by,
+                  })
 
 
 
